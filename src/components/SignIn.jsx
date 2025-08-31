@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/firebase";
 import { updateProfile } from "firebase/auth";
 
-const Login = () => {
+const SigninPage = () => {
     const [activeTab, setActiveTab] = useState("signin");
     const navigate = useNavigate();
     const firebase = useFirebase();
@@ -258,4 +258,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SigninPage;

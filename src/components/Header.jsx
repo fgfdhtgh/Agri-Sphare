@@ -33,7 +33,6 @@ const Header = () => {
   };
 
   return (
-    <Router>
       <header className="sticky top-0 bg-white/60 backdrop-blur-md z-10 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -74,7 +73,7 @@ const Header = () => {
               ) : (
                 <div className="hidden md:flex items-center gap-4 hover:bg-white/40 rounded-md px-2 py-0.5">
                   <Link
-                    to="/signin"
+                    to="/login"
                     className="flex items-center gap-2 text-[#212121] hover:text-[#29B6F6] transition-colors"
                   >
                     <UserCircle2 size={24} className=""/>
@@ -110,7 +109,7 @@ const Header = () => {
                   ) : (
                     <>
                       <Link
-                        to="/signin"
+                        to="/login"
                         className="flex items-center gap-2 hover:text-[#29B6F6]"
                       >
                         <UserCircle2 size={24} className="text-[#212121]"/>
@@ -136,13 +135,7 @@ const Header = () => {
         </div>
       </header>
 
-      <Routes>
-        <Route path="/signin" element={<SignIn />} />
-      </Routes>
-    </Router>
-
-    
-  );
+  ); 
 };
 
 export default Header;
