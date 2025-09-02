@@ -250,7 +250,9 @@ const SigninPage = () => {
                             <button type="submit" className="w-full py-2 bg-[#4CAF50] text-[#212121] rounded-2xl hover:bg-[#FFC107] transition">
                                 Sign Up
                             </button>
+                            <a href="/seller" className="text-blue-500 text-center">Want to be a seller ?</a>
                         </form>
+                        
                     )}
                 </div>
             </div>
