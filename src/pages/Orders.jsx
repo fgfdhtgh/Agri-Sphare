@@ -239,7 +239,7 @@ const AddProductForm = ({ onAddProduct }) => {
     }
   };
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
       <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         <div>
