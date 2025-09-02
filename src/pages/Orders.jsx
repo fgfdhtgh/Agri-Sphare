@@ -110,40 +110,40 @@ const initialProducts = [
 const ORDERS_PER_PAGE = 3;
 
 // --- SVG Icons ---
-const AgriMartLogo = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-6 w-6 text-green-600"
-  >
-    <path d="M2 22s2-2 5-2 5 2 8 2 5-2 5-2V2s-2 2-5 2-5-2-8-2-5 2-5 2z" />
-    <path d="M12 14v-4" />
-    <path d="M12 6h.01" />
-  </svg>
-);
+// const AgriMartLogo = () => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="24"
+//     height="24"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     className="h-6 w-6 text-green-600"
+//   >
+//     <path d="M2 22s2-2 5-2 5 2 8 2 5-2 5-2V2s-2 2-5 2-5-2-8-2-5 2-5 2z" />
+//     <path d="M12 14v-4" />
+//     <path d="M12 6h.01" />
+//   </svg>
+// );
 
-const SparklesIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 3L9.27 9.27L3 12l6.27 2.73L12 21l2.73-6.27L21 12l-6.27-2.73z" />
-  </svg>
-);
+// const SparklesIcon = () => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="16"
+//     height="16"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//   >
+//     <path d="M12 3L9.27 9.27L3 12l6.27 2.73L12 21l2.73-6.27L21 12l-6.27-2.73z" />
+//   </svg>
+// );
 
 // --- Reusable Components ---
 
@@ -228,16 +228,8 @@ const OrderCard = ({ order, onUpdateStatus }) => {
   );
 };
 
-const AddProductForm = ({ onAddProduct }) => {
+const AddProductForm = () => {
   const [productName, setProductName] = useState('');
-  const [generatedDesc, setGeneratedDesc] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const generateDescription = async () => {
-    if (!productName) {
-      alert('Please enter a product name first.');
-      return;
-    }
-  };
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
       <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
@@ -263,7 +255,6 @@ const AddProductForm = ({ onAddProduct }) => {
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
             />
-            
           </div>
         </div>
         <div>
