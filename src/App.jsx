@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Orders from "./pages/Orders"
 import LandingPage from './pages/LandingPage';
-import SigninPage from './components/SignIn';
-import SellerPage from './components/Seller';
+import SigninPage from './pages/SignIn';
+import SellerPage from './pages/Seller';
 
 function App() {
   return (
