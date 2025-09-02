@@ -13,13 +13,12 @@ import SellerPage from "../components/Seller"
 function LandingPage() {
     return (
       <TooltipProvider>
-        <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center " style={{ backgroundImage: "url('/Rice-Field-2-2048x1365.jpg')"}}>
+        <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center " style={{ backgroundImage: "url('/Rice-Field.jpg')"}}>
           <div className="bg-black/30 min-h-screen">
             <Header />
             <main>
               <Hero />
               <Features />
-              <Orders/>
               <FarmerDashboard />
               <Leaderboard />
               <LocalBuyersLogistics />

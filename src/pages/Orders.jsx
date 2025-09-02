@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import Header from '../components/Header';
 
 // --- Helper Data ---
 const initialOrders = [
@@ -231,118 +232,120 @@ const OrderCard = ({ order, onUpdateStatus }) => {
 const AddProductForm = () => {
   const [productName, setProductName] = useState('');
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-        <div>
-          <label className="text-sm font-medium text-gray-700">Category</label>
-          <select className="form-input">
-            <option>Select category</option>
-            <option>Vegetables</option>
-            <option>Fruits</option>
-            <option>Fertilizers</option>
-          </select>
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">
-            Product name
-          </label>
-          <div className="relative">
+    <>
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+          <div>
+            <label className="text-sm font-medium text-gray-700">Category</label>
+            <select className="form-input">
+              <option>Select category</option>
+              <option>Vegetables</option>
+              <option>Fruits</option>
+              <option>Fertilizers</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">
+              Product name
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="e.g., Tomato (Heirloom)"
+                className="form-input"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Price</label>
             <input
               type="text"
-              placeholder="e.g., Tomato (Heirloom)"
+              placeholder="Enter price (per kg/bag)"
               className="form-input"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
             />
           </div>
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">Price</label>
-          <input
-            type="text"
-            placeholder="Enter price (per kg/bag)"
-            className="form-input"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">
-            Min order quantity
-          </label>
-          <input
-            type="text"
-            placeholder="Enter minimum quantity"
-            className="form-input"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">
-            Stop selling before
-          </label>
-          <input
-            type="text"
-            placeholder="Select date & time"
-            className="form-input"
-            onFocus={(e) => (e.target.type = 'datetime-local')}
-            onBlur={(e) => (e.target.type = 'text')}
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-gray-700">
-            Stock status
-          </label>
-          <select className="form-input">
-            <option>In stock</option>
-            <option>Out of stock</option>
-          </select>
-          <p className="text-xs text-gray-500 mt-1">
-            Set to Out of stock when unavailable
-          </p>
-        </div>
-        <div className="md:col-span-2">
-          <label className="text-sm font-medium text-gray-700">
-            Upload image
-          </label>
-          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-            <div className="space-y-1 text-center">
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 48 48"
-                aria-hidden="true"
-              >
-                <path
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <div className="flex text-sm text-gray-600">
-                <label
-                  htmlFor="file-upload"
-                  className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+          <div>
+            <label className="text-sm font-medium text-gray-700">
+              Min order quantity
+            </label>
+            <input
+              type="text"
+              placeholder="Enter minimum quantity"
+              className="form-input"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">
+              Stop selling before
+            </label>
+            <input
+              type="text"
+              placeholder="Select date & time"
+              className="form-input"
+              onFocus={(e) => (e.target.type = 'datetime-local')}
+              onBlur={(e) => (e.target.type = 'text')}
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">
+              Stock status
+            </label>
+            <select className="form-input">
+              <option>In stock</option>
+              <option>Out of stock</option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              Set to Out of stock when unavailable
+            </p>
+          </div>
+          <div className="md:col-span-2">
+            <label className="text-sm font-medium text-gray-700">
+              Upload image
+            </label>
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+              <div className="space-y-1 text-center">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
                 >
-                  <span>Choose a product image</span>
-                  <input
-                    id="file-upload"
-                    name="file-upload"
-                    type="file"
-                    className="sr-only"
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
-                </label>
+                </svg>
+                <div className="flex text-sm text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+                  >
+                    <span>Choose a product image</span>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      className="sr-only"
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="flex justify-end gap-3 mt-6">
+          <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
+            Add Product
+          </button>
+        </div>
       </div>
-      <div className="flex justify-end gap-3 mt-6">
-        <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
-          Add Product
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 
@@ -458,78 +461,81 @@ function Orders() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      <style>{`.form-input{width:100%;margin-top:.25rem;padding:.5rem .75rem;border:1px solid #D1D5DB;border-radius:.5rem;transition:all .2s}.form-input:focus{outline:0;--tw-ring-color:#10B981;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);border-color:#10B981}`}</style>
-      
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-4xl mx-auto space-y-12">
-          {/* Orders Section */}
-          <div>
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
-              <div className="flex items-center space-x-2 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
-                <FilterButton tabName="ongoing">Ongoing</FilterButton>
-                <FilterButton tabName="declined">Declined</FilterButton>
-                <FilterButton tabName="delivered">Delivered</FilterButton>
+    <>
+      <Header />
+      <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center " style={{ backgroundImage: "url('/Rice-Field.jpg')"}}>
+        <style>{`.form-input{width:100%;margin-top:.25rem;padding:.5rem .75rem;border:1px solid #D1D5DB;border-radius:.5rem;transition:all .2s}.form-input:focus{outline:0;--tw-ring-color:#10B981;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);border-color:#10B981} `}</style>
+        
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-4xl mx-auto space-y-12">
+            {/* Orders Section */}
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+                <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
+                <div className="flex items-center space-x-2 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
+                  <FilterButton tabName="ongoing">Ongoing</FilterButton>
+                  <FilterButton tabName="declined">Declined</FilterButton>
+                  <FilterButton tabName="delivered">Delivered</FilterButton>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {currentOrders.length > 0 ? (
+                  currentOrders.map((order) => (
+                    <OrderCard
+                      key={order.id}
+                      order={order}
+                      onUpdateStatus={handleUpdateOrderStatus}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-16 px-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="mx-auto h-12 w-12 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    <h3 className="mt-4 text-lg font-medium text-gray-900">
+                      No orders here
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                      You have no {activeTab} orders at the moment.
+                    </p>
+                  </div>
+                )}
+              </div>
+              <Pagination
+                totalItems={filteredOrders.length}
+                itemsPerPage={ORDERS_PER_PAGE}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+            {/* Product Management Section */}
+            <div>
+              <AddProductForm
+                onAddProduct={(newProduct) =>
+                  setProducts((prev) => [...prev, newProduct])
+                }
+              />
+              <div className="mt-6 space-y-4">
+                {products.map((product) => (
+                  <ProductListItem key={product.id} product={product} />
+                ))}
               </div>
             </div>
-            <div className="space-y-4">
-              {currentOrders.length > 0 ? (
-                currentOrders.map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    order={order}
-                    onUpdateStatus={handleUpdateOrderStatus}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-16 px-6 bg-white rounded-lg shadow-sm border border-gray-200">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <h3 className="mt-4 text-lg font-medium text-gray-900">
-                    No orders here
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    You have no {activeTab} orders at the moment.
-                  </p>
-                </div>
-              )}
-            </div>
-            <Pagination
-              totalItems={filteredOrders.length}
-              itemsPerPage={ORDERS_PER_PAGE}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-            />
           </div>
-          {/* Product Management Section */}
-          <div>
-            <AddProductForm
-              onAddProduct={(newProduct) =>
-                setProducts((prev) => [...prev, newProduct])
-              }
-            />
-            <div className="mt-6 space-y-4">
-              {products.map((product) => (
-                <ProductListItem key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 }
 
