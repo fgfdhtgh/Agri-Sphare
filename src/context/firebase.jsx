@@ -57,6 +57,14 @@ export const FirebaseProvider = (props) => {
           password
         });
     };
+    // const CreateNewSeller = async (username, email, phone, password) => {
+    //     return await addDoc(collection(firestore, 'Sellers'), {
+    //       username,
+    //       email,
+    //       phone, 
+    //       password
+    //     });
+    // };
     const getAllusers = () => {
         return getDocs(collection(firestore, 'Books'));
     }

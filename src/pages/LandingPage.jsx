@@ -7,6 +7,7 @@ import LocalBuyersLogistics from "../components/LocalBuyersLogistics"
 import Leaderboard from "../components/LeaderBoard"
 import Footer from "../components/Footer"
 import Orders from "./Orders"
+import SellerPage from "../components/Seller"
 
 
 function LandingPage() {
