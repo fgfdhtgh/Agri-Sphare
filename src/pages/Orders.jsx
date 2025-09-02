@@ -148,245 +148,245 @@ const ORDERS_PER_PAGE = 3;
 
 // --- Reusable Components ---
 
-const OrderCard = ({ order, onUpdateStatus }) => {
-  const getQuantityLabel = (product, quantity) =>
-    product.toLowerCase().includes('npk')
-      ? `${quantity.split(' ')[0]} bags`
-      : `${quantity.split(' ')[0]} kg`;
-  const getPriceLabel = (product, price) =>
-    product.toLowerCase().includes('npk')
-      ? `Price: ₹${price}/bag`
-      : `Price: ₹${price}/kg`;
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-start space-x-4">
-          <img
-            src={order.avatar}
-            alt={order.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div>
-            <p className="font-bold text-gray-800">{order.name}</p>
-            <p className="text-sm text-gray-500">
-              Wants to buy: {order.product} (My product)
-            </p>
-          </div>
-        </div>
-        <div className="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full">
-          {getQuantityLabel(order.product, order.quantity)}
-        </div>
-      </div>
-      <div className="mt-4 pl-14">
-        <label
-          htmlFor={`reason-${order.id}`}
-          className="text-sm font-medium text-gray-500"
-        >
-          Reason
-        </label>
-        <input
-          type="text"
-          id={`reason-${order.id}`}
-          className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-          placeholder="Optional: Add a reason for your action"
-        />
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-100">
-        <p className="text-sm text-gray-600 font-medium pl-14 md:pl-0">
-          {getPriceLabel(order.product, order.pricePerUnit)} • Total:{' '}
-          <span className="font-bold text-gray-900">
-            ₹{order.total.toLocaleString('en-IN')}
-          </span>
-        </p>
-        {order.status === 'ongoing' && (
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => onUpdateStatus(order.id, 'declined')}
-              className="bg-gray-200 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm"
-            >
-              Decline
-            </button>
-            <button
-              onClick={() => onUpdateStatus(order.id, 'delivered')}
-              className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm"
-            >
-              Accept
-            </button>
-          </div>
-        )}
-        {order.status === 'declined' && (
-          <span className="text-sm font-semibold text-red-600 bg-red-100 py-1 px-3 rounded-full">
-            Declined
-          </span>
-        )}
-        {order.status === 'delivered' && (
-          <span className="text-sm font-semibold text-blue-600 bg-blue-100 py-1 px-3 rounded-full">
-            Delivered
-          </span>
-        )}
-      </div>
-    </div>
-  );
-};
+// const OrderCard = ({ order, onUpdateStatus }) => {
+//   const getQuantityLabel = (product, quantity) =>
+//     product.toLowerCase().includes('npk')
+//       ? `${quantity.split(' ')[0]} bags`
+//       : `${quantity.split(' ')[0]} kg`;
+//   const getPriceLabel = (product, price) =>
+//     product.toLowerCase().includes('npk')
+//       ? `Price: ₹${price}/bag`
+//       : `Price: ₹${price}/kg`;
+//   return (
+//     <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
+//       <div className="flex flex-wrap items-start justify-between gap-4">
+//         <div className="flex items-start space-x-4">
+//           <img
+//             src={order.avatar}
+//             alt={order.name}
+//             className="w-10 h-10 rounded-full object-cover"
+//           />
+//           <div>
+//             <p className="font-bold text-gray-800">{order.name}</p>
+//             <p className="text-sm text-gray-500">
+//               Wants to buy: {order.product} (My product)
+//             </p>
+//           </div>
+//         </div>
+//         <div className="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full">
+//           {getQuantityLabel(order.product, order.quantity)}
+//         </div>
+//       </div>
+//       <div className="mt-4 pl-14">
+//         <label
+//           htmlFor={`reason-${order.id}`}
+//           className="text-sm font-medium text-gray-500"
+//         >
+//           Reason
+//         </label>
+//         <input
+//           type="text"
+//           id={`reason-${order.id}`}
+//           className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+//           placeholder="Optional: Add a reason for your action"
+//         />
+//       </div>
+//       <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-100">
+//         <p className="text-sm text-gray-600 font-medium pl-14 md:pl-0">
+//           {getPriceLabel(order.product, order.pricePerUnit)} • Total:{' '}
+//           <span className="font-bold text-gray-900">
+//             ₹{order.total.toLocaleString('en-IN')}
+//           </span>
+//         </p>
+//         {order.status === 'ongoing' && (
+//           <div className="flex items-center space-x-3">
+//             <button
+//               onClick={() => onUpdateStatus(order.id, 'declined')}
+//               className="bg-gray-200 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm"
+//             >
+//               Decline
+//             </button>
+//             <button
+//               onClick={() => onUpdateStatus(order.id, 'delivered')}
+//               className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm"
+//             >
+//               Accept
+//             </button>
+//           </div>
+//         )}
+//         {order.status === 'declined' && (
+//           <span className="text-sm font-semibold text-red-600 bg-red-100 py-1 px-3 rounded-full">
+//             Declined
+//           </span>
+//         )}
+//         {order.status === 'delivered' && (
+//           <span className="text-sm font-semibold text-blue-600 bg-blue-100 py-1 px-3 rounded-full">
+//             Delivered
+//           </span>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
-const AddProductForm = () => {
-  const [productName, setProductName] = useState('');
-  return (
-    <>
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700">Category</label>
-            <select className="form-input">
-              <option>Select category</option>
-              <option>Vegetables</option>
-              <option>Fruits</option>
-              <option>Fertilizers</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Product name
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="e.g., Tomato (Heirloom)"
-                className="form-input"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Price</label>
-            <input
-              type="text"
-              placeholder="Enter price (per kg/bag)"
-              className="form-input"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Min order quantity
-            </label>
-            <input
-              type="text"
-              placeholder="Enter minimum quantity"
-              className="form-input"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Stop selling before
-            </label>
-            <input
-              type="text"
-              placeholder="Select date & time"
-              className="form-input"
-              onFocus={(e) => (e.target.type = 'datetime-local')}
-              onBlur={(e) => (e.target.type = 'text')}
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Stock status
-            </label>
-            <select className="form-input">
-              <option>In stock</option>
-              <option>Out of stock</option>
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              Set to Out of stock when unavailable
-            </p>
-          </div>
-          <div className="md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">
-              Upload image
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-1 text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
-                  >
-                    <span>Choose a product image</span>
-                    <input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      className="sr-only"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-end gap-3 mt-6">
-          <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
-            Add Product
-          </button>
-        </div>
-      </div>
-    </>
-  );
-};
+// const AddProductForm = () => {
+//   const [productName, setProductName] = useState('');
+//   return (
+//     <>
+//       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
+//         <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">Category</label>
+//             <select className="form-input">
+//               <option>Select category</option>
+//               <option>Vegetables</option>
+//               <option>Fruits</option>
+//               <option>Fertilizers</option>
+//             </select>
+//           </div>
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">
+//               Product name
+//             </label>
+//             <div className="relative">
+//               <input
+//                 type="text"
+//                 placeholder="e.g., Tomato (Heirloom)"
+//                 className="form-input"
+//                 value={productName}
+//                 onChange={(e) => setProductName(e.target.value)}
+//               />
+//             </div>
+//           </div>
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">Price</label>
+//             <input
+//               type="text"
+//               placeholder="Enter price (per kg/bag)"
+//               className="form-input"
+//             />
+//           </div>
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">
+//               Min order quantity
+//             </label>
+//             <input
+//               type="text"
+//               placeholder="Enter minimum quantity"
+//               className="form-input"
+//             />
+//           </div>
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">
+//               Stop selling before
+//             </label>
+//             <input
+//               type="text"
+//               placeholder="Select date & time"
+//               className="form-input"
+//               onFocus={(e) => (e.target.type = 'datetime-local')}
+//               onBlur={(e) => (e.target.type = 'text')}
+//             />
+//           </div>
+//           <div>
+//             <label className="text-sm font-medium text-gray-700">
+//               Stock status
+//             </label>
+//             <select className="form-input">
+//               <option>In stock</option>
+//               <option>Out of stock</option>
+//             </select>
+//             <p className="text-xs text-gray-500 mt-1">
+//               Set to Out of stock when unavailable
+//             </p>
+//           </div>
+//           <div className="md:col-span-2">
+//             <label className="text-sm font-medium text-gray-700">
+//               Upload image
+//             </label>
+//             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+//               <div className="space-y-1 text-center">
+//                 <svg
+//                   className="mx-auto h-12 w-12 text-gray-400"
+//                   stroke="currentColor"
+//                   fill="none"
+//                   viewBox="0 0 48 48"
+//                   aria-hidden="true"
+//                 >
+//                   <path
+//                     d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
+//                     strokeWidth="2"
+//                     strokeLinecap="round"
+//                     strokeLinejoin="round"
+//                   />
+//                 </svg>
+//                 <div className="flex text-sm text-gray-600">
+//                   <label
+//                     htmlFor="file-upload"
+//                     className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+//                   >
+//                     <span>Choose a product image</span>
+//                     <input
+//                       id="file-upload"
+//                       name="file-upload"
+//                       type="file"
+//                       className="sr-only"
+//                     />
+//                   </label>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//         <div className="flex justify-end gap-3 mt-6">
+//           <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
+//             Add Product
+//           </button>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 
-const ProductListItem = ({ product }) => (
-  <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
-    <div className="flex items-center gap-4">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-16 h-16 rounded-lg object-cover"
-      />
-      <div>
-        <p className="font-bold text-gray-800">{product.name}</p>
-        <p className="text-xs text-gray-500">
-          Category: {product.category} • Min order: {product.minOrder}
-        </p>
-        <p className="text-xs text-gray-500">
-          Stop selling: {product.stopSelling} • Price: ₹{product.price}/
-          {product.name.toLowerCase().includes('npk') ? 'bag' : 'kg'}
-        </p>
-      </div>
-    </div>
-    <div className="flex items-center gap-3">
-      <span
-        className={`text-xs font-semibold px-3 py-1 rounded-full ${
-          product.inStock
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800'
-        }`}
-      >
-        {product.inStock ? 'In stock' : 'Out of stock'}
-      </span>
-      <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
-        Edit
-      </button>
-      <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
-        Close
-      </button>
-    </div>
-  </div>
-);
+// const ProductListItem = ({ product }) => (
+//   <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
+//     <div className="flex items-center gap-4">
+//       <img
+//         src={product.image}
+//         alt={product.name}
+//         className="w-16 h-16 rounded-lg object-cover"
+//       />
+//       <div>
+//         <p className="font-bold text-gray-800">{product.name}</p>
+//         <p className="text-xs text-gray-500">
+//           Category: {product.category} • Min order: {product.minOrder}
+//         </p>
+//         <p className="text-xs text-gray-500">
+//           Stop selling: {product.stopSelling} • Price: ₹{product.price}/
+//           {product.name.toLowerCase().includes('npk') ? 'bag' : 'kg'}
+//         </p>
+//       </div>
+//     </div>
+//     <div className="flex items-center gap-3">
+//       <span
+//         className={`text-xs font-semibold px-3 py-1 rounded-full ${
+//           product.inStock
+//             ? 'bg-green-100 text-green-800'
+//             : 'bg-red-100 text-red-800'
+//         }`}
+//       >
+//         {product.inStock ? 'In stock' : 'Out of stock'}
+//       </span>
+//       <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
+//         Edit
+//       </button>
+//       <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
+//         Close
+//       </button>
+//     </div>
+//   </div>
+// );
 
 const Pagination = ({
   totalItems,
