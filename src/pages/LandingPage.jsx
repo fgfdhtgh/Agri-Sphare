@@ -15,7 +15,6 @@ function LandingPage() {
       <TooltipProvider>
         <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center " style={{ backgroundImage: "url('/Rice-Field.jpg')"}}>
           <div className="bg-black/30 min-h-screen">
-            <Header />
             <main>
               <Hero />
               <Features />
