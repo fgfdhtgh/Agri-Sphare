@@ -165,8 +165,8 @@ const Sidebar = ({ filters, setFilters }) => {
     const availabilityOptions = ['In stock', 'Preorder'];
 
     return (
-        <aside className="w-full lg:w-1/4 xl:w-1/5 p-4">
-            <h2 className="text-xl font-bold mb-4">Filters</h2>
+        <aside>
+            <h2 className="text-xl font-bold mb-6">Filters</h2>
             <div className="space-y-6">
                 {/* Search Filter */}
                 <div>
@@ -354,9 +354,11 @@ function AgriMart() {
                 </header>
 
                 <main className="flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar */}
-                     <div className={`lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:w-1/4 xl:w-1/5 bg-white p-4 rounded-lg border border-gray-200`}>
-                        <Sidebar filters={filters} setFilters={setFilters} />
+                    {/* Sidebar -- UPDATED for better large screen layout */}
+                     <div className={`lg:block ${isSidebarOpen ? 'block' : 'hidden'} lg:w-72 lg:flex-shrink-0`}>
+                        <div className="bg-white p-6 rounded-lg border border-gray-200 h-full">
+                            <Sidebar filters={filters} setFilters={setFilters} />
+                        </div>
                      </div>
 
                     {/* Product Listing */}
