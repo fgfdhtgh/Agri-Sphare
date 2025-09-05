@@ -5,12 +5,25 @@ import { useFirebase } from '../context/firebase';
 
 // ProductCard Component: Renders a single product item
 const ProductCard = (props) => {
+    const firebase = useFirebase()
+
     const categoryColors = {
         Vegetables: 'bg-green-100 text-green-800',
         Seeds: 'bg-yellow-100 text-yellow-800',
         Fertilizer: 'bg-blue-100 text-blue-800',
         Saplings: 'bg-lime-100 text-lime-800',
     };
+
+    // if (!firebase.isLoggedIn) {
+    //     alert("Please Login to shopping")
+    //     return
+    // }
+
+    const placeOrder = async () => {
+        const result = await firebase.placeOrder(props.id);
+        alert("Your Order is placed")
+        console.log("Order Placed", result);
+    }
 
     return (
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out">
@@ -31,7 +44,7 @@ const ProductCard = (props) => {
                     <button className="w-full text-center py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                         Details
                     </button>
-                    <button className="w-full text-center py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
+                    <button onClick={placeOrder} className="w-full text-center py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
                         Buy Now
                     </button>
                 </div>
@@ -301,8 +314,15 @@ function AgriMart() {
 
     useEffect(() => {
         firebase.getAllProducts()
-        .then((products) => setProducts(products.docs))
-    },[])
+          .then((snapshot) => {
+            const products = snapshot.docs.map(doc => ({
+              id: doc.id,      
+              ...doc.data()    
+            }));
+            setProducts(products);
+          });
+    }, []);
+    
 
 
     return (
@@ -374,7 +394,7 @@ function AgriMart() {
                         {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {filteredProducts.map(product => (
-                                    <ProductCard key={product.id} {...product.data()} id={product.id} />
+                                    <ProductCard key={product.id} {...product} id={product.id} />
                                 ))}
                                 {/* link={`/products/view/${product.id}`} */}
                             </div>

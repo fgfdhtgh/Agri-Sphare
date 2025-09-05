@@ -12,6 +12,7 @@ const SigninPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
+    const [role, setRole] = useState("");
 
     const handleParentClick = () => {
         navigate("/");
@@ -39,9 +40,9 @@ const SigninPage = () => {
             alert("login successful!");
         } else {
             const result = await firebase.signupWithEmailPassword(email, password);
-            const user = await firebase.CreateNewUser(username, email, phone, password);
+            const user = await firebase.CreateNewUser(username, email, phone, password, role);
             await updateProfile(result.user, {
-                displayName: username  // this is from your signup form
+                displayName: username  
             });
             alert("Registration successful!");
             //navigate("/");
@@ -247,6 +248,11 @@ const SigninPage = () => {
                                 Must be more than 8 characters, including
                                 <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
                             </p>
+                            <select className="form-input" value={role} onChange={(e) => setRole(e.target.value)}>
+                                <option>Select Your Role</option>
+                                <option>User</option>
+                                <option>Seller</option>
+                            </select> 
                             <button type="submit" className="w-full py-2 bg-[#4CAF50] text-[#212121] rounded-2xl hover:bg-[#FFC107] transition">
                                 Sign Up
                             </button>

@@ -49,12 +49,13 @@ export const FirebaseProvider = (props) => {
     const signinWithEmailPassword = (email, password) => signInWithEmailAndPassword(auth, email, password);
     const signinWithGoogle = () => signInWithPopup(auth, googleProvider);
     const logout = () => signOut(auth);
-    const CreateNewUser = async (username, email, phone, password) => {
+    const CreateNewUser = async (username, email, phone, password, role) => {
         return await addDoc(collection(firestore, 'Users'), {
           username,
           email,
           phone, 
-          password
+          password,
+          role
         });
     };
 
@@ -91,13 +92,23 @@ export const FirebaseProvider = (props) => {
         const result = await getDocs(q);
         return result;
     }
+
+    const placeOrder = async (productId) => {
+        const collectionRef = collection(firestore, 'Products', productId, 'Orders');
+        const result = await addDoc(collectionRef, {
+            userId: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+        });
+        return result
+    }
       
     const isLoggedIn = user ? true : false;
 
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, placeOrder, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );
