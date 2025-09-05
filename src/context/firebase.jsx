@@ -80,8 +80,8 @@ export const FirebaseProvider = (props) => {
     //       password
     //     });
     // };
-    const getAllusers = () => {
-        return getDocs(collection(firestore, 'Users'));
+    const getAllProducts = () => {
+        return getDocs(collection(firestore, 'Products'));
     }
       
     const isLoggedIn = user ? true : false;
@@ -89,7 +89,7 @@ export const FirebaseProvider = (props) => {
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllusers, AddNewProduct, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );

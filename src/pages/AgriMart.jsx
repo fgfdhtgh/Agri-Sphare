@@ -104,7 +104,7 @@ const initialProducts = [
 // --- HELPER COMPONENTS ---
 
 // ProductCard Component: Renders a single product item
-const ProductCard = ({ product }) => {
+const ProductCard = ({ props }) => {
     const categoryColors = {
         Vegetables: 'bg-green-100 text-green-800',
         Seeds: 'bg-yellow-100 text-yellow-800',
@@ -115,17 +115,17 @@ const ProductCard = ({ product }) => {
     return (
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out">
             <div className="w-full h-48 bg-gray-200">
-                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover"/>
+                <img src={props.image} alt={props.name} className="w-full h-full object-cover"/>
             </div>
             <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${categoryColors[product.category] || 'bg-gray-100 text-gray-800'}`}>
-                        {product.category}
+                    <h3 className="text-lg font-semibold text-gray-800">{props.name}</h3>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${categoryColors[props.category] || 'bg-gray-100 text-gray-800'}`}>
+                        {props.category}
                     </span>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 mb-1">₹{product.price} <span className="text-sm font-normal text-gray-500">/ {product.priceUnit}</span></p>
-                <p className="text-sm text-gray-500 mb-4">Min order: {product.minOrder} {product.priceUnit.includes('kg') || product.priceUnit.includes('plant') ? product.priceUnit : 'units'}</p>
+                <p className="text-2xl font-bold text-gray-900 mb-1">₹{props.price} </p>
+                <p className="text-sm text-gray-500 mb-4">Min order: {props.minOrder} </p>
                 
                 <div className="flex items-center space-x-2">
                     <button className="w-full text-center py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200">
