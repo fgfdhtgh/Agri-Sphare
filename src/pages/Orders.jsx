@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import {useFirebase} from '../context/firebase'
 import { Link } from "react-router-dom";
+import { uploadOnCloudinary } from "../context/cloudinary.js";
 
 
 // --- Helper Data ---
@@ -415,6 +416,9 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const firebase = useFirebase()
+
+  const [name, setName] = useState('')
+  
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders((prevOrders) =>
