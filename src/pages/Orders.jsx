@@ -242,9 +242,8 @@ const AddProductForm = () => {
   const [image, setImage] = useState('')
   
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const coverUrl = await uploadOnCloudinary(image);
-    const list = await firebase.AddNewProduct(name, category, price, minOrder, stock, coverUrl);
+    const imageUrl = await uploadOnCloudinary(image);
+    const list = await firebase.AddNewProduct(name, category, price, minOrder, stock, imageUrl);
     alert("Product add successfully !");
   }
 
