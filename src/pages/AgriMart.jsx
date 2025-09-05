@@ -1,110 +1,10 @@
 import React, { useState, useEffect } from 'react';
-
-// --- MOCK DATA ---
-// This data would eventually come from your Firebase backend.
-const initialProducts = [
-    {
-        id: 1,
-        name: 'Tomato (Grade A)',
-        category: 'Vegetables',
-        price: 28,
-        priceUnit: 'kg',
-        minOrder: 50,
-        imageUrl: 'https://placehold.co/600x400/f87171/ffffff?text=Tomato',
-        sellerType: 'Certified',
-        availability: 'In stock',
-        popularity: 4.5
-    },
-    {
-        id: 2,
-        name: 'Maize Hybrid-900',
-        category: 'Seeds',
-        price: 1250,
-        priceUnit: '5kg',
-        minOrder: 2,
-        imageUrl: 'https://placehold.co/600x400/fbbf24/ffffff?text=Maize',
-        sellerType: 'Cooperative',
-        availability: 'In stock',
-        popularity: 4.4
-    },
-    {
-        id: 3,
-        name: 'NPK 19:19:19',
-        category: 'Fertilizer',
-        price: 950,
-        priceUnit: '45kg',
-        minOrder: 1,
-        imageUrl: 'https://placehold.co/600x400/4ade80/ffffff?text=Fertilizer',
-        sellerType: 'Local',
-        availability: 'Preorder',
-        popularity: 4.5
-    },
-    {
-        id: 4,
-        name: 'Banana TC Saplings',
-        category: 'Saplings',
-        price: 38,
-        priceUnit: 'plant',
-        minOrder: 100,
-        imageUrl: 'https://placehold.co/600x400/facc15/ffffff?text=Banana+Sapling',
-        sellerType: 'Certified',
-        availability: 'In stock',
-        popularity: 4.3
-    },
-    {
-        id: 5,
-        name: 'Green Chili',
-        category: 'Vegetables',
-        price: 42,
-        priceUnit: 'kg',
-        minOrder: 30,
-        imageUrl: 'https://placehold.co/600x400/84cc16/ffffff?text=Green+Chili',
-        sellerType: 'Local',
-        availability: 'In stock',
-        popularity: 4.2
-    },
-    {
-        id: 6,
-        name: 'Cabbage (Medium)',
-        category: 'Vegetables',
-        price: 24,
-        priceUnit: 'kg',
-        minOrder: 40,
-        imageUrl: 'https://placehold.co/600x400/22c55e/ffffff?text=Cabbage',
-        sellerType: 'Cooperative',
-        availability: 'Preorder',
-        popularity: 4.1
-    },
-    {
-        id: 7,
-        name: 'Organic Manure',
-        category: 'Fertilizer',
-        price: 500,
-        priceUnit: '50kg',
-        minOrder: 1,
-        imageUrl: 'https://placehold.co/600x400/a3e635/ffffff?text=Manure',
-        sellerType: 'Certified',
-        availability: 'In stock',
-        popularity: 4.8
-    },
-    {
-        id: 8,
-        name: 'Mango Saplings',
-        category: 'Saplings',
-        price: 150,
-        priceUnit: 'plant',
-        minOrder: 20,
-        imageUrl: 'https://placehold.co/600x400/f59e0b/ffffff?text=Mango+Sapling',
-        sellerType: 'Certified',
-        availability: 'Preorder',
-        popularity: 4.7
-    },
-];
+import { useFirebase } from '../context/firebase';
 
 // --- HELPER COMPONENTS ---
 
 // ProductCard Component: Renders a single product item
-const ProductCard = ({ props }) => {
+const ProductCard = (props) => {
     const categoryColors = {
         Vegetables: 'bg-green-100 text-green-800',
         Seeds: 'bg-yellow-100 text-yellow-800',
@@ -259,8 +159,10 @@ const Sidebar = ({ filters, setFilters }) => {
 function AgriMart() {
     // --- STATE MANAGEMENT ---
     // The products state would be populated from a Firebase call in a real app.
-    const [products, setProducts] = useState(initialProducts);
-    const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+    
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const firebase = useFirebase();
+    const [products, setProducts] = useState([]);
     
     // State for all active filters
     const [filters, setFilters] = useState({
@@ -288,7 +190,7 @@ function AgriMart() {
         // 2. Filter by Search Term
         if (filters.search) {
             tempProducts = tempProducts.filter(p =>
-                p.name.toLowerCase().includes(filters.search.toLowerCase())
+                (p.name || '').toLowerCase().includes(filters.search.toLowerCase())
             );
         }
         
@@ -329,6 +231,12 @@ function AgriMart() {
         setFilteredProducts(tempProducts);
 
     }, [filters, sortBy, products]);
+
+    useEffect(() => {
+        firebase.getAllProducts()
+        .then((products) => setProducts(products.docs))
+    },[])
+
 
     return (
         <div className="bg-gray-50 min-h-screen font-sans">
@@ -399,8 +307,9 @@ function AgriMart() {
                         {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {filteredProducts.map(product => (
-                                    <ProductCard key={product.id} product={product} />
+                                    <ProductCard key={product.id} {...product.data()} id={product.id} />
                                 ))}
+                                {/* link={`/products/view/${product.id}`} */}
                             </div>
                         ) : (
                             <div className="text-center py-16 bg-white rounded-lg border border-gray-200">
