@@ -32,7 +32,7 @@ const ProductCard = (props) => {
                         Details
                     </button>
                     <button className="w-full text-center py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200">
-                        Add to cart
+                        Buy Now
                     </button>
                 </div>
             </div>
