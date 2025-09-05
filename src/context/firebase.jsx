@@ -57,6 +57,21 @@ export const FirebaseProvider = (props) => {
           password
         });
     };
+
+    const AddNewProduct = async (name, category, price, minOrder, stock, imageUrl) => {
+        return await addDoc(collection(firestore, 'Products'), {
+          name,
+          category,
+          price, 
+          minOrder,
+          stock,
+          image : imageUrl,
+          userId: user.uid,
+          email: user.email,
+          UserName: user.displayName,
+          photoURL: user.photoURL
+        });
+    };
     // const CreateNewSeller = async (username, email, phone, password) => {
     //     return await addDoc(collection(firestore, 'Sellers'), {
     //       username,
@@ -66,7 +81,7 @@ export const FirebaseProvider = (props) => {
     //     });
     // };
     const getAllusers = () => {
-        return getDocs(collection(firestore, 'Books'));
+        return getDocs(collection(firestore, 'Users'));
     }
       
     const isLoggedIn = user ? true : false;
@@ -74,7 +89,7 @@ export const FirebaseProvider = (props) => {
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllusers, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllusers, AddNewProduct, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );
