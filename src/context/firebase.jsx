@@ -68,7 +68,7 @@ export const FirebaseProvider = (props) => {
           image : imageUrl,
           userId: user.uid,
           email: user.email,
-          displayName: user.displayName,
+          UserName: user.displayName,
           photoURL: user.photoURL
         });
     };

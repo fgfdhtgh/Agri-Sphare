@@ -234,6 +234,8 @@ const OrderCard = ({ order, onUpdateStatus }) => {
 
 const AddProductForm = () => {
 
+  const firebase = useFirebase()
+
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [price, setPrice] = useState('')
@@ -242,6 +244,11 @@ const AddProductForm = () => {
   const [image, setImage] = useState('')
   
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!image) {
+      alert("Please upload an image");
+      return;
+    }
     const imageUrl = await uploadOnCloudinary(image);
     const list = await firebase.AddNewProduct(name, category, price, minOrder, stock, imageUrl);
     alert("Product add successfully !");
@@ -251,7 +258,7 @@ const AddProductForm = () => {
     <>
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
         <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
-        <div onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-700">
                 Product name
@@ -303,6 +310,7 @@ const AddProductForm = () => {
                 Stock status
               </label>
               <select className="form-input" value={stock} onChange={(e) => setStock(e.target.value)}>
+                <option>Select options</option>
                 <option>In stock</option>
                 <option>Out of stock</option>
               </select>
@@ -316,7 +324,7 @@ const AddProductForm = () => {
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
-                  <svg
+                <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
                     fill="none"
@@ -348,12 +356,12 @@ const AddProductForm = () => {
                 </div>
               </div>
             </div>
-        </div>
-        <div className="flex justify-end gap-3 mt-6">
-          <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
-            Add Product
-          </button>
-        </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button type='submit' className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
+                Add Product
+              </button>
+            </div>
+        </form>
       </div>
     </>
   );
