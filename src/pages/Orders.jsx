@@ -233,103 +233,122 @@ const OrderCard = ({ order, onUpdateStatus }) => {
 };
 
 const AddProductForm = () => {
-  const [productName, setProductName] = useState('');
+
+  const [name, setName] = useState('')
+  const [category, setCategory] = useState('')
+  const [price, setPrice] = useState('')
+  const [minOrder, setMinOrder] = useState('')
+  const [stock, setStock] = useState('')
+  const [image, setImage] = useState('')
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const coverUrl = await uploadOnCloudinary(image);
+    const list = await firebase.AddNewProduct(name, category, price, minOrder, stock, coverUrl);
+    alert("Product add successfully !");
+  }
+
   return (
     <>
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200" id='orders'>
         <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Product name
-            </label>
-            <div className="relative">
-              <input 
+        <div onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div className="md:col-span-2">
+              <label className="text-sm font-medium text-gray-700">
+                Product name
+              </label>
+              <div className="relative">
+                <input 
+                  type="text"
+                  placeholder="e.g., Tomato (Heirloom)"
+                  className="form-input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Category</label>
+              <select className="form-input" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option>Select category</option>
+                <option>Vegetables</option>
+                <option>Seeds</option>
+                <option>Fertilizers</option>
+                <option>Saplings</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">Price</label>
+              <input
                 type="text"
-                placeholder="e.g., Tomato (Heirloom)"
+                placeholder="Enter price (per kg/bag)"
                 className="form-input"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Category</label>
-            <select className="form-input">
-              <option>Select category</option>
-              <option>Vegetables</option>
-              <option>Seeds</option>
-              <option>Fertilizers</option>
-              <option>Saplings</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Price</label>
-            <input
-              type="text"
-              placeholder="Enter price (per kg/bag)"
-              className="form-input"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Min order quantity
-            </label>
-            <input
-              type="text"
-              placeholder="Enter minimum quantity"
-              className="form-input"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Stock status
-            </label>
-            <select className="form-input">
-              <option>In stock</option>
-              <option>Out of stock</option>
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              Set to Out of stock when unavailable
-            </p>
-          </div>
-          <div className="md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">
-              Upload image
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-1 text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+            <div>
+              <label className="text-sm font-medium text-gray-700">
+                Min order quantity
+              </label>
+              <input
+                type="text"
+                placeholder="Enter minimum quantity"
+                className="form-input"
+                value={minOrder}
+                onChange={(e) => setMinOrder(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">
+                Stock status
+              </label>
+              <select className="form-input" value={stock} onChange={(e) => setStock(e.target.value)}>
+                <option>In stock</option>
+                <option>Out of stock</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">
+                Set to Out of stock when unavailable
+              </p>
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-sm font-medium text-gray-700">
+                Upload image
+              </label>
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
                   >
-                    <span>Choose a product image</span>
-                    <input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      className="sr-only"
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
-                  </label>
+                  </svg>
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="file-upload"
+                      className="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500"
+                    >
+                      <span>Choose a product image</span>
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        className="sr-only"
+                        onChange={(e) => setImage(e.target.files[0])}
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
         </div>
         <div className="flex justify-end gap-3 mt-6">
           <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm">
@@ -416,9 +435,6 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const firebase = useFirebase()
-
-  const [name, setName] = useState('')
-  
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders((prevOrders) =>
@@ -531,11 +547,7 @@ function Orders() {
             </div>
             {/* Product Management Section */}
             <div>
-              <AddProductForm
-                onAddProduct={(newProduct) =>
-                  setProducts((prev) => [...prev, newProduct])
-                }
-              />
+              <AddProductForm/>
               <div className="mt-6 space-y-4">
                 {products.map((product) => (
                   <ProductListItem key={product.id} product={product} />
