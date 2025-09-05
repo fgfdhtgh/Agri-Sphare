@@ -155,6 +155,70 @@ const Sidebar = ({ filters, setFilters }) => {
     );
 };
 
+// Helper function for filtering and sorting
+const applyFiltersAndSorting = (products, filters, sortBy) => {
+    let tempProducts = [...products];
+
+    //console.log(products);
+
+    // 1. Filter by Category (case-insensitive)
+    if (filters.category !== "All") {
+        tempProducts = tempProducts.filter(
+            (p) => (p.category || "").toLowerCase() === filters.category.toLowerCase()
+        );
+    }
+
+    // 2. Filter by Search Term
+    if (filters.search) {
+        tempProducts = tempProducts.filter((p) =>
+            (p.name || "").toLowerCase().includes(filters.search.toLowerCase())
+        );
+    }
+
+    // 3. Filter by Price
+    const minPrice = parseFloat(filters.price.min);
+    const maxPrice = parseFloat(filters.price.max);
+    if (!isNaN(minPrice)) {
+        tempProducts = tempProducts.filter((p) => (p.price || 0) >= minPrice);
+    }
+    if (!isNaN(maxPrice)) {
+        tempProducts = tempProducts.filter((p) => (p.price || 0) <= maxPrice);
+    }
+
+    // 4. Filter by Seller Type
+    if (filters.seller.length > 0) {
+        tempProducts = tempProducts.filter((p) =>
+            filters.seller.includes(p.sellerType)
+        );
+    }
+
+    // 5. Filter by Availability
+    if (filters.availability) {
+        tempProducts = tempProducts.filter(
+            (p) => p.availability === filters.availability
+        );
+    }
+
+    // 6. Apply Sorting
+    switch (sortBy) {
+        case "Price: Low to High":
+            tempProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
+            break;
+        case "Price: High to Low":
+            tempProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
+            break;
+        case "Popularity":
+        default:
+            tempProducts.sort(
+                (a, b) => (b.popularity || 0) - (a.popularity || 0)
+            );
+            break;
+    }
+
+    return tempProducts;
+};
+
+
 // Main App Component
 function AgriMart() {
     // --- STATE MANAGEMENT ---
@@ -180,55 +244,58 @@ function AgriMart() {
 
     // --- FILTERING AND SORTING LOGIC ---
     useEffect(() => {
-        let tempProducts = [...products];
 
-        // 1. Filter by Category
-        if (filters.category !== 'All') {
-            tempProducts = tempProducts.filter(p => p.category === filters.category);
-        }
+        setFilteredProducts(applyFiltersAndSorting(products, filters, sortBy));
 
-        // 2. Filter by Search Term
-        if (filters.search) {
-            tempProducts = tempProducts.filter(p =>
-                (p.name || '').toLowerCase().includes(filters.search.toLowerCase())
-            );
-        }
+        // let tempProducts = [...products];
+
+        // // 1. Filter by Category
+        // if (filters.category !== 'All') {
+        //     tempProducts = tempProducts.filter(p => p.category === filters.category);
+        // }
+
+        // // 2. Filter by Search Term
+        // if (filters.search) {
+        //     tempProducts = tempProducts.filter(p =>
+        //         (p.name || '').toLowerCase().includes(filters.search.toLowerCase())
+        //     );
+        // }
         
-        // 3. Filter by Price
-        const minPrice = parseFloat(filters.price.min);
-        const maxPrice = parseFloat(filters.price.max);
-        if (!isNaN(minPrice)) {
-             tempProducts = tempProducts.filter(p => p.price >= minPrice);
-        }
-        if (!isNaN(maxPrice)) {
-            tempProducts = tempProducts.filter(p => p.price <= maxPrice);
-        }
+        // // 3. Filter by Price
+        // const minPrice = parseFloat(filters.price.min);
+        // const maxPrice = parseFloat(filters.price.max);
+        // if (!isNaN(minPrice)) {
+        //      tempProducts = tempProducts.filter(p => p.price >= minPrice);
+        // }
+        // if (!isNaN(maxPrice)) {
+        //     tempProducts = tempProducts.filter(p => p.price <= maxPrice);
+        // }
         
-        // 4. Filter by Seller Type
-        if (filters.seller.length > 0) {
-            tempProducts = tempProducts.filter(p => filters.seller.includes(p.sellerType));
-        }
+        // // 4. Filter by Seller Type
+        // if (filters.seller.length > 0) {
+        //     tempProducts = tempProducts.filter(p => filters.seller.includes(p.sellerType));
+        // }
 
-        // 5. Filter by Availability
-        if (filters.availability) {
-            tempProducts = tempProducts.filter(p => p.availability === filters.availability);
-        }
+        // // 5. Filter by Availability
+        // if (filters.availability) {
+        //     tempProducts = tempProducts.filter(p => p.availability === filters.availability);
+        // }
 
-        // 6. Apply Sorting
-        switch (sortBy) {
-            case 'Price: Low to High':
-                tempProducts.sort((a, b) => a.price - b.price);
-                break;
-            case 'Price: High to Low':
-                tempProducts.sort((a, b) => b.price - a.price);
-                break;
-            case 'Popularity':
-            default:
-                 tempProducts.sort((a, b) => b.popularity - a.popularity);
-                break;
-        }
+        // // 6. Apply Sorting
+        // switch (sortBy) {
+        //     case 'Price: Low to High':
+        //         tempProducts.sort((a, b) => a.price - b.price);
+        //         break;
+        //     case 'Price: High to Low':
+        //         tempProducts.sort((a, b) => b.price - a.price);
+        //         break;
+        //     case 'Popularity':
+        //     default:
+        //          tempProducts.sort((a, b) => b.popularity - a.popularity);
+        //         break;
+        // }
 
-        setFilteredProducts(tempProducts);
+        // setFilteredProducts(tempProducts);
 
     }, [filters, sortBy, products]);
 
