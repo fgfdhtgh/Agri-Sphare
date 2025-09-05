@@ -8,7 +8,7 @@ import { getAuth,
         onAuthStateChanged, 
         signOut 
     } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDocs, query, where, } from 'firebase/firestore'
 
 const FirebaseContext = createContext(null);
 const useFirebase = () => useContext(FirebaseContext);
@@ -83,13 +83,21 @@ export const FirebaseProvider = (props) => {
     const getAllProducts = () => {
         return getDocs(collection(firestore, 'Products'));
     }
+
+    const fetchMyProducts = async () => {
+        if (!user) return;
+        const collectionRef = collection(firestore, 'Products');
+        const q = query(collectionRef, where('userId', '==', user.uid));
+        const result = await getDocs(q);
+        return result;
+    }
       
     const isLoggedIn = user ? true : false;
 
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );
