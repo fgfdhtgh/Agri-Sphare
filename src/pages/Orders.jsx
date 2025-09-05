@@ -1,153 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {useFirebase} from '../context/firebase'
 import { Link } from "react-router-dom";
 import { uploadOnCloudinary } from "../context/cloudinary.js";
 
-
-// --- Helper Data ---
-const initialOrders = [
-  {
-    id: 1,
-    name: 'Priya S',
-    product: 'Tomato',
-    quantity: '120 kg',
-    pricePerUnit: 28,
-    total: 3360,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=PS',
-    status: 'ongoing',
-  },
-  {
-    id: 2,
-    name: 'Arun K',
-    product: 'Green Chilli',
-    quantity: '60 kg',
-    pricePerUnit: 42,
-    total: 2520,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=AK',
-    status: 'ongoing',
-  },
-  {
-    id: 3,
-    name: 'Meena T',
-    product: 'NPK 19:19:19',
-    quantity: '3 bags',
-    pricePerUnit: 950,
-    total: 2850,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=MT',
-    status: 'ongoing',
-  },
-  {
-    id: 4,
-    name: 'Rohan V',
-    product: 'Tomato',
-    quantity: '50 kg',
-    pricePerUnit: 28,
-    total: 1400,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=RV',
-    status: 'declined',
-  },
-  {
-    id: 5,
-    name: 'Sita G',
-    product: 'Green Chilli',
-    quantity: '25 kg',
-    pricePerUnit: 42,
-    total: 1050,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=SG',
-    status: 'delivered',
-  },
-  {
-    id: 6,
-    name: 'Kumar P',
-    product: 'Tomato',
-    quantity: '200 kg',
-    pricePerUnit: 28,
-    total: 5600,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=KP',
-    status: 'ongoing',
-  },
-  {
-    id: 7,
-    name: 'Lakshmi M',
-    product: 'NPK 19:19:19',
-    quantity: '5 bags',
-    pricePerUnit: 950,
-    total: 4750,
-    avatar: 'https://placehold.co/40x40/E2E8F0/4A5568?text=LM',
-    status: 'ongoing',
-  },
-];
-
-const initialProducts = [
-  {
-    id: 1,
-    name: 'Tomato',
-    category: 'Vegetables',
-    minOrder: '10 kg',
-    stopSelling: 'Today, 6:00 PM',
-    price: 28,
-    image: 'https://placehold.co/80x80/FEE2E2/DC2626?text=Tomato',
-    inStock: true,
-  },
-  {
-    id: 2,
-    name: 'Green Chili',
-    category: 'Vegetables',
-    minOrder: '10 kg',
-    stopSelling: 'Tomorrow, 11:00 AM',
-    price: 42,
-    image: 'https://placehold.co/80x80/D1FAE5/059669?text=Chili',
-    inStock: true,
-  },
-  {
-    id: 3,
-    name: 'NPK 19:19:19',
-    category: 'Fertilizers',
-    minOrder: '1 bag',
-    stopSelling: 'In 3 days',
-    price: 950,
-    image: 'https://placehold.co/80x80/E0E7FF/4338CA?text=NPK',
-    inStock: true,
-  },
-];
-
 const ORDERS_PER_PAGE = 3;
-
-// --- SVG Icons ---
-// const AgriMartLogo = () => (
-//   <svg
-//     xmlns="http://www.w3.org/2000/svg"
-//     width="24"
-//     height="24"
-//     viewBox="0 0 24 24"
-//     fill="none"
-//     stroke="currentColor"
-//     strokeWidth="2"
-//     strokeLinecap="round"
-//     strokeLinejoin="round"
-//     className="h-6 w-6 text-green-600"
-//   >
-//     <path d="M2 22s2-2 5-2 5 2 8 2 5-2 5-2V2s-2 2-5 2-5-2-8-2-5 2-5 2z" />
-//     <path d="M12 14v-4" />
-//     <path d="M12 6h.01" />
-//   </svg>
-// );
-
-// const SparklesIcon = () => (
-//   <svg
-//     xmlns="http://www.w3.org/2000/svg"
-//     width="16"
-//     height="16"
-//     viewBox="0 0 24 24"
-//     fill="none"
-//     stroke="currentColor"
-//     strokeWidth="2"
-//     strokeLinecap="round"
-//     strokeLinejoin="round"
-//   >
-//     <path d="M12 3L9.27 9.27L3 12l6.27 2.73L12 21l2.73-6.27L21 12l-6.27-2.73z" />
-//   </svg>
-// );
 
 // --- Reusable Components ---
 
@@ -367,44 +223,42 @@ const AddProductForm = () => {
   );
 };
 
-const ProductListItem = ({ product }) => (
-  <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
-    <div className="flex items-center gap-4">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-16 h-16 rounded-lg object-cover"
-      />
-      <div>
-        <p className="font-bold text-gray-800">{product.name}</p>
-        <p className="text-xs text-gray-500">
-          Category: {product.category} • Min order: {product.minOrder}
-        </p>
-        <p className="text-xs text-gray-500">
-          Stop selling: {product.stopSelling} • Price: ₹{product.price}/
-          {product.name.toLowerCase().includes('npk') ? 'bag' : 'kg'}
-        </p>
+const ProductListItem = (props) => {
+    return(
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <img
+            src={props.image}
+            alt={props.name}
+            className="w-16 h-16 rounded-lg object-cover"
+          />
+          <div>
+            <p className="font-bold text-gray-800">{props.name}</p>
+            <p className="text-xs text-gray-500">
+              Category: {props.category} • Min order: {props.minOrder}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span
+            className={`text-xs font-semibold px-3 py-1 rounded-full ${
+              props.stock
+                ? 'bg-green-100 text-green-800'
+                : 'bg-red-100 text-red-800'
+            }`}
+          >
+            {props.stock ? 'In stock' : 'Out of stock'}
+          </span>
+          <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
+            Edit
+          </button>
+          <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
+            Close
+          </button>
+        </div>
       </div>
-    </div>
-    <div className="flex items-center gap-3">
-      <span
-        className={`text-xs font-semibold px-3 py-1 rounded-full ${
-          product.inStock
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800'
-        }`}
-      >
-        {product.inStock ? 'In stock' : 'Out of stock'}
-      </span>
-      <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
-        Edit
-      </button>
-      <button className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-sm">
-        Close
-      </button>
-    </div>
-  </div>
-);
+    )
+}
 
 const Pagination = ({
   totalItems,
@@ -437,11 +291,16 @@ const Pagination = ({
 // --- Main Orders Component ---
 function Orders() {
   const [activeTab, setActiveTab] = useState('ongoing');
-  const [orders, setOrders] = useState(initialOrders);
-  const [products] = useState(initialProducts);
+  const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [products, setProducts] = useState([])
   const firebase = useFirebase()
+
+  useEffect(() => {
+      if(firebase.isLoggedIn){
+          firebase.fetchMyProducts(firebase.user.uid).then((product) => setProducts(product.docs))
+      }    
+  }, [firebase])
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders((prevOrders) =>
@@ -557,7 +416,7 @@ function Orders() {
               <AddProductForm/>
               <div className="mt-6 space-y-4">
                 {products.map((product) => (
-                  <ProductListItem key={product.id} product={product} />
+                  <ProductListItem key={product.id} {...product.data()} id={product.id}/>
                 ))}
               </div>
             </div>
