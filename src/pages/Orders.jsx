@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import Header from '../components/Header';
+import {useFirebase} from '../context/firebase'
+import { Link } from "react-router-dom";
 
 
 // --- Helper Data ---
@@ -238,20 +239,11 @@ const AddProductForm = () => {
         <h2 className="text-xl font-bold text-gray-900 mb-6">Add Product</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700">Category</label>
-            <select className="form-input">
-              <option>Select category</option>
-              <option>Vegetables</option>
-              <option>Fruits</option>
-              <option>Fertilizers</option>
-            </select>
-          </div>
-          <div>
             <label className="text-sm font-medium text-gray-700">
               Product name
             </label>
             <div className="relative">
-              <input
+              <input 
                 type="text"
                 placeholder="e.g., Tomato (Heirloom)"
                 className="form-input"
@@ -259,6 +251,16 @@ const AddProductForm = () => {
                 onChange={(e) => setProductName(e.target.value)}
               />
             </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Category</label>
+            <select className="form-input">
+              <option>Select category</option>
+              <option>Vegetables</option>
+              <option>Seeds</option>
+              <option>Fertilizers</option>
+              <option>Saplings</option>
+            </select>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700">Price</label>
@@ -276,18 +278,6 @@ const AddProductForm = () => {
               type="text"
               placeholder="Enter minimum quantity"
               className="form-input"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Stop selling before
-            </label>
-            <input
-              type="text"
-              placeholder="Select date & time"
-              className="form-input"
-              onFocus={(e) => (e.target.type = 'datetime-local')}
-              onBlur={(e) => (e.target.type = 'text')}
             />
           </div>
           <div>
@@ -424,6 +414,8 @@ function Orders() {
   const [products] = useState(initialProducts);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const firebase = useFirebase()
+
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
@@ -461,9 +453,23 @@ function Orders() {
     </button>
   );
 
+  if(!firebase.isLoggedIn){
+        return (
+            <div className='container mx-auto text-center py-20'>
+                <h1 className='text-2xl mb-5'>Please login to view your orders</h1>
+                <Link
+                to="/login"
+                className="flex justify-center gap-2  text-[#212121] hover:text-[#29B6F6] transition-colors"
+              >
+                <span className="text-2xl font-medium border-2 px-2 py-2 rounded-lg">Sign In</span>
+              </Link>
+            </div>
+        )
+    }
+
   return (
     <>
-      <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center " style={{ backgroundImage: "url('/Rice-Field.jpg')"}}>
+      <div className="max-w-[100rem] mx-auto bg-fixed bg-cover bg-center ">
         <style>{`.form-input{width:100%;margin-top:.25rem;padding:.5rem .75rem;border:1px solid #D1D5DB;border-radius:.5rem;transition:all .2s}.form-input:focus{outline:0;--tw-ring-color:#10B981;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);border-color:#10B981} `}</style>
         
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
