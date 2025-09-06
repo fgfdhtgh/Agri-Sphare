@@ -8,7 +8,7 @@ import { getAuth,
         onAuthStateChanged, 
         signOut 
     } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, query, where, } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, setDoc } from 'firebase/firestore'
 
 const FirebaseContext = createContext(null);
 const useFirebase = () => useContext(FirebaseContext);
@@ -23,9 +23,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const firestore = getFirestore(app)
+export const firestore = getFirestore(app)
 
 
 export const FirebaseProvider = (props) => {
@@ -49,13 +49,28 @@ export const FirebaseProvider = (props) => {
     const signinWithEmailPassword = (email, password) => signInWithEmailAndPassword(auth, email, password);
     const signinWithGoogle = () => signInWithPopup(auth, googleProvider);
     const logout = () => signOut(auth);
-    const CreateNewUser = async (username, email, phone, password, role) => {
-        return await addDoc(collection(firestore, 'Users'), {
+    const CreateNewUser = async (username, email, phone, password, user) => {
+        return await setDoc(doc(firestore, 'Users', user.uid), {
           username,
           email,
           phone, 
           password,
-          role
+          role: "user"
+        });
+    };
+
+    const CreateNewSeller = async (username, email, fullname, phone, password, location, gstinNo, categories, adharNo, user) => {
+        return await setDoc(doc(firestore, 'Users', user.uid), {
+          username,
+          email,
+          fullname,
+          phone, 
+          password,
+          location, 
+          gstinNo, 
+          categories, 
+          adharNo,
+          role: "seller"
         });
     };
 
@@ -73,14 +88,7 @@ export const FirebaseProvider = (props) => {
           photoURL: user.photoURL
         });
     };
-    // const CreateNewSeller = async (username, email, phone, password) => {
-    //     return await addDoc(collection(firestore, 'Sellers'), {
-    //       username,
-    //       email,
-    //       phone, 
-    //       password
-    //     });
-    // };
+   
     const getAllProducts = () => {
         return getDocs(collection(firestore, 'Products'));
     }
@@ -108,7 +116,7 @@ export const FirebaseProvider = (props) => {
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, placeOrder, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, placeOrder, CreateNewSeller, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );

@@ -151,8 +151,10 @@
 
 import { Menu, X, UserCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useFirebase } from "../context/firebase";
+import { useFirebase, auth, firestore } from "../context/firebase";
 import { useRef, useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const Header = () => {
   const firebase = useFirebase();
@@ -176,6 +178,26 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [open]);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(firestore, "Users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setCurrentUser({ uid: user.uid, ...docSnap.data() });
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  
+
 
   return (
     <header className="sticky top-0 bg-white/60 backdrop-blur-md z-10 shadow-md">
@@ -213,11 +235,13 @@ const Header = () => {
               className="text-sm font-medium transition-colors hover:bg-white/40 rounded-md px-2 py-0.5 hover:text-[#29B6F6] text-black">
               AI Detection
             </Link>
-            <Link 
-              to="/orders" 
-              className="text-sm font-medium transition-colors hover:bg-white/40 rounded-md px-2 py-0.5 hover:text-[#29B6F6] text-black">
-              Orders
-            </Link>
+            {currentUser?.role === "seller" && (
+              <Link 
+                to="/products" 
+                className="text-sm font-medium transition-colors hover:bg-white/40 rounded-md px-2 py-0.5 hover:text-[#29B6F6] text-black">
+                Products
+              </Link>
+            )}
           </nav>
 
           {/* User Section */}
@@ -234,7 +258,7 @@ const Header = () => {
                   <UserCircle2 size={28} className="text-[#212121]" />
                 )}
                 <span className="text-sm font-medium text-[#212121] hover:text-[#29B6F6]">
-                  {firebase.user.displayName || "User"}
+                  {firebase.user.displayName || "User" || firebase.user.username}
                 </span>
                 <button 
                   onClick={handleLogout} 

@@ -1,13 +1,10 @@
 import { TooltipProvider } from "../components/ui/tooltip"
-import Header from "../components/Header"
 import Hero from "../components/Hero"
 import Features from "../components/Features"
 import FarmerDashboard from "../components/FarmerDashboard"
 import LocalBuyersLogistics from "../components/LocalBuyersLogistics"
 import Leaderboard from "../components/LeaderBoard"
 import Footer from "../components/Footer"
-import Orders from "./Orders"
-import SellerPage from "./Seller"
 
 
 function LandingPage() {
