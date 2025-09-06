@@ -12,7 +12,6 @@ const SigninPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
-    const [role, setRole] = useState("");
 
     const handleParentClick = () => {
         navigate("/");
@@ -27,9 +26,6 @@ const SigninPage = () => {
         if (firebase.isLoggedIn) {
             navigate('/')
         }
-
-        // firebase.getAllusers()
-        // .then((books) => setBooks(books.docs))
     },[firebase, navigate])
 
     const handleSubmit = async (e) => {
@@ -40,7 +36,7 @@ const SigninPage = () => {
             alert("login successful!");
         } else {
             const result = await firebase.signupWithEmailPassword(email, password);
-            const user = await firebase.CreateNewUser(username, email, phone, password, role);
+            const user = await firebase.CreateNewUser(username, email, phone, password, result.user);
             await updateProfile(result.user, {
                 displayName: username  
             });
@@ -123,16 +119,16 @@ const SigninPage = () => {
                                     type="password"
                                     required
                                     placeholder="Password"
-                                    minlength="8"
-                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                    minlength="6"
+                                    // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
                                     onChange={(e) => setPassword(e.target.value)} value={password}
                                 />
                             </label>
-                            <p className="validator-hint hidden -mt-2">
+                            {/* <p className="validator-hint hidden -mt-2">
                                 Must be more than 8 characters, including
                                 <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
-                            </p>
+                            </p> */}
 
                             <div className="flex w-full flex-col mt-2">
                                 <button className="w-full py-2 bg-[#4CAF50] text-[#212121] hover:bg-[#FFC107] transition rounded-2xl">
@@ -238,8 +234,8 @@ const SigninPage = () => {
                                     type="password"
                                     required
                                     placeholder="Password"
-                                    minlength="8"
-                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                    minlength="6"
+                                    // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
                                     onChange={(e) => setPassword(e.target.value)} value={password}
                                 />
@@ -248,11 +244,6 @@ const SigninPage = () => {
                                 Must be more than 8 characters, including
                                 <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
                             </p>
-                            <select className="form-input" value={role} onChange={(e) => setRole(e.target.value)}>
-                                <option>Select Your Role</option>
-                                <option>User</option>
-                                <option>Seller</option>
-                            </select> 
                             <button type="submit" className="w-full py-2 bg-[#4CAF50] text-[#212121] rounded-2xl hover:bg-[#FFC107] transition">
                                 Sign Up
                             </button>

@@ -8,21 +8,14 @@ const ORDERS_PER_PAGE = 3;
 // --- Reusable Components ---
 
 const OrderCard = ({ order, onUpdateStatus }) => {
-  const getQuantityLabel = (product, quantity) =>
-    product.toLowerCase().includes('npk')
-      ? `${quantity.split(' ')[0]} bags`
-      : `${quantity.split(' ')[0]} kg`;
-  const getPriceLabel = (product, price) =>
-    product.toLowerCase().includes('npk')
-      ? `Price: ₹${price}/bag`
-      : `Price: ₹${price}/kg`;
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start space-x-4">
           <img
-            src={order.avatar}
-            alt={order.name}
+            src={order.image}
+            alt={order.product}
             className="w-10 h-10 rounded-full object-cover"
           />
           <div>
@@ -31,9 +24,6 @@ const OrderCard = ({ order, onUpdateStatus }) => {
               Wants to buy: {order.product} (My product)
             </p>
           </div>
-        </div>
-        <div className="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full">
-          {getQuantityLabel(order.product, order.quantity)}
         </div>
       </div>
       <div className="mt-4 pl-14">
@@ -52,7 +42,7 @@ const OrderCard = ({ order, onUpdateStatus }) => {
       </div>
       <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-100">
         <p className="text-sm text-gray-600 font-medium pl-14 md:pl-0">
-          {getPriceLabel(order.product, order.pricePerUnit)} • Total:{' '}
+          Price: ₹{order.pricePerUnit} • Total:{' '}
           <span className="font-bold text-gray-900">
             ₹{order.total.toLocaleString('en-IN')}
           </span>
@@ -289,7 +279,7 @@ const Pagination = ({
 };
 
 // --- Main Orders Component ---
-function Orders() {
+function Products(props) {
   const [activeTab, setActiveTab] = useState('ongoing');
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -301,6 +291,15 @@ function Orders() {
           firebase.fetchMyProducts(firebase.user.uid).then((product) => setProducts(product.docs))
       }    
   }, [firebase])
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      const myOrders = await firebase.fetchMyOrders();
+      console.log("Fetched Orders:", myOrders); // 👈 Debug ke liye
+      setOrders(myOrders);
+    };
+    loadOrders();
+  }, []);
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
     setOrders((prevOrders) =>
@@ -427,4 +426,4 @@ function Orders() {
   );
 }
 
-export default Orders
+export default Products
