@@ -110,13 +110,48 @@ export const FirebaseProvider = (props) => {
         });
         return result
     }
+
+    const getOrders = async (productId) => {
+        const collectionRef = collection(firestore, 'Products', productId, 'Orders');
+        const result = await getDocs(collectionRef);
+        return result;
+    }
+
+    const fetchMyOrders = async () => {
+        const myProductsSnapshot = await fetchMyProducts();
+        const orders = [];
+      
+        for (let doc of myProductsSnapshot.docs) {
+          const productId = doc.id;
+          const productData = doc.data();
+      
+          const ordersSnapshot = await getOrders(productId);
+          ordersSnapshot.forEach(orderDoc => {
+            orders.push({
+              id: orderDoc.id,
+              productId: productId,
+              product: productData.name,
+              pricePerUnit: productData.price,
+              avatar: orderDoc.data().photoURL || "/user-logo.png",
+              name: orderDoc.data().displayName,
+              quantity: productData.minOrder,
+              total: productData.price * parseFloat(productData.minOrder),
+              status: "ongoing", // default (later update from Firestore if you store it)
+              ...orderDoc.data()
+            });
+          });
+        }
+      
+        return orders;
+      };
+      
       
     const isLoggedIn = user ? true : false;
 
     //console.log(user);
 
     return (
-        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, placeOrder, CreateNewSeller, user, isLoggedIn}}>
+        <FirebaseContext.Provider value={{signupWithEmailPassword, signinWithEmailPassword, signinWithGoogle, CreateNewUser, logout, getAllProducts, AddNewProduct, fetchMyProducts, placeOrder, CreateNewSeller, getOrders, fetchMyOrders, user, isLoggedIn}}>
             {props.children}
         </FirebaseContext.Provider>
     );

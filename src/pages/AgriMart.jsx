@@ -22,7 +22,7 @@ const ProductCard = (props) => {
     const placeOrder = async () => {
         const result = await firebase.placeOrder(props.id);
         alert("Your Order is placed")
-        console.log("Order Placed", result);
+        //console.log("Order Placed", result);
     }
 
     return (
@@ -61,21 +61,12 @@ const Sidebar = ({ filters, setFilters }) => {
         setFilters(prev => ({ ...prev, price: { ...prev.price, [name]: value } }));
     };
 
-    const handleSellerChange = (seller) => {
-        setFilters(prev => {
-            const newSellers = prev.seller.includes(seller)
-                ? prev.seller.filter(s => s !== seller)
-                : [...prev.seller, seller];
-            return { ...prev, seller: newSellers };
-        });
-    };
-
     const handleAvailabilityChange = (availability) => {
         setFilters(prev => ({...prev, availability: prev.availability === availability ? '' : availability}));
     };
     
-    const sellerOptions = ['Local', 'Certified', 'Cooperative'];
-    const availabilityOptions = ['In stock', 'Preorder'];
+    
+    const availabilityOptions = ['In stock', 'Out of stock'];
 
     return (
         <aside>
@@ -124,25 +115,7 @@ const Sidebar = ({ filters, setFilters }) => {
                     </div>
                 </div>
 
-                {/* Seller Filter */}
-                <div>
-                    <label className="text-sm font-medium text-gray-700">Seller</label>
-                    <div className="space-y-2 mt-1">
-                        {sellerOptions.map(seller => (
-                            <button
-                                key={seller}
-                                onClick={() => handleSellerChange(seller)}
-                                className={`w-full text-left px-4 py-2 border rounded-md transition-colors duration-200 ${
-                                    filters.seller.includes(seller)
-                                        ? 'bg-green-100 border-green-400 text-green-800'
-                                        : 'bg-white border-gray-300 hover:bg-gray-50'
-                                }`}
-                            >
-                                {seller}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                
 
                 {/* Availability Filter */}
                 <div>
@@ -172,8 +145,6 @@ const Sidebar = ({ filters, setFilters }) => {
 const applyFiltersAndSorting = (products, filters, sortBy) => {
     let tempProducts = [...products];
 
-    //console.log(products);
-
     // 1. Filter by Category (case-insensitive)
     if (filters.category !== "All") {
         tempProducts = tempProducts.filter(
@@ -188,42 +159,36 @@ const applyFiltersAndSorting = (products, filters, sortBy) => {
         );
     }
 
-    // 3. Filter by Price
-    const minPrice = parseFloat(filters.price.min);
-    const maxPrice = parseFloat(filters.price.max);
-    if (!isNaN(minPrice)) {
-        tempProducts = tempProducts.filter((p) => (p.price || 0) >= minPrice);
+    // 3. Filter by Price ✅ FIXED
+    const minPrice = filters.price.min ? parseFloat(filters.price.min) : null;
+    const maxPrice = filters.price.max ? parseFloat(filters.price.max) : null;
+
+    if (minPrice !== null && !isNaN(minPrice)) {
+        tempProducts = tempProducts.filter((p) => parseFloat(p.price || 0) >= minPrice);
     }
-    if (!isNaN(maxPrice)) {
-        tempProducts = tempProducts.filter((p) => (p.price || 0) <= maxPrice);
+    if (maxPrice !== null && !isNaN(maxPrice)) {
+        tempProducts = tempProducts.filter((p) => parseFloat(p.price || 0) <= maxPrice);
     }
 
-    // 4. Filter by Seller Type
-    if (filters.seller.length > 0) {
-        tempProducts = tempProducts.filter((p) =>
-            filters.seller.includes(p.sellerType)
-        );
-    }
-
-    // 5. Filter by Availability
+    // 4. Filter by Availability ✅ FIXED
     if (filters.availability) {
         tempProducts = tempProducts.filter(
-            (p) => p.availability === filters.availability
+            (p) => (p.availability || "").toLowerCase() === filters.availability.toLowerCase()
         );
     }
 
-    // 6. Apply Sorting
+    // 5. Apply Sorting
     switch (sortBy) {
         case "Price: Low to High":
-            tempProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
+            tempProducts.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
             break;
         case "Price: High to Low":
-            tempProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
+            tempProducts.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
             break;
         case "Popularity":
         default:
             tempProducts.sort(
-                (a, b) => (b.popularity || 0) - (a.popularity || 0)
+                (a, b) => (parseFloat(b.popularity) || 0) - (parseFloat(a.popularity) || 0)
             );
             break;
     }
@@ -246,7 +211,7 @@ function AgriMart() {
         category: 'All',
         search: '',
         price: { min: '', max: '' },
-        seller: [],
+        
         availability: '',
     });
     
